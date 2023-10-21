@@ -1,0 +1,40 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Interests
+    network: sepolia
+    source:
+      address: "0xEEA22585F28aed481612E36080fcE6CE6c8520b6"
+      abi: Interests
+      startBlock: 4531171
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - InterestsAdded
+        - OwnerSet
+      abis:
+        - name: Interests
+          file: Interests/abis/Interests.json
+      eventHandlers:
+        - event: InterestsAdded(indexed uint256,string)
+          handler: handleInterestsAdded
+        - event: OwnerSet(indexed address,indexed address)
+          handler: handleOwnerSet
+      file: Interests/Interests.wasm
+templates:
+  - kind: file/arweave
+    name: InterestsMetaDataTemplate
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: Interests/Interests.wasm
+      handler: handleInterestsMetaData
+      entities:
+        - InterestsMetaData
+      abis:
+        - name: Interests
+          file: InterestsMetaDataTemplate/abis/Interests.json
